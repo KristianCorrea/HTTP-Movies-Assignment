@@ -6,14 +6,13 @@ const initialMovie ={
     title: '',
     director: '',
     metascore: '',
+    stars: ''
 }
 
 const EditMovie=({getMovieList})=>{
     const [update, setUpdate]=useState(initialMovie);
     const history=useHistory();
-    const params = useParams();
     const {id}=useParams();
-
     useEffect(() => {
         axios
           .get(`http://localhost:5000/api/movies/${id}`)
@@ -25,10 +24,16 @@ const EditMovie=({getMovieList})=>{
 
     const handleInput=e=>{
         e.persist();
+        let value=e.target.value;
+
+        if(e.target.name==='stars'){
+                value=value.split(',')
+        }
         setUpdate({
             ...update,
-            [e.target.name]: e.target.value
+            [e.target.name]: value
         })
+        
     }
 
     const handleSubmit=e=>{
@@ -73,6 +78,15 @@ const EditMovie=({getMovieList})=>{
                     name='metascore'
                     value={update.metascore}
                     placeholder='Metascore'
+                    onChange={handleInput}
+                />
+                </label>
+                <label>
+                <input
+                    type='text'
+                    name='stars'
+                    value={update.stars}
+                    placeholder='stars'
                     onChange={handleInput}
                 />
                 </label>
